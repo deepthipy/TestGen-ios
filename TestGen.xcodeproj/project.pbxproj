@@ -6,13 +6,31 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D1E3DA5E307036A500AF3DD0 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D1E3DA5D307036A500AF3DD0 /* Secrets.xcconfig */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		D16512BD2FE9F026004C0433 /* TestGen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestGen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1E3DA5D307036A500AF3DD0 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D1E3DA60307037C200AF3DD0 /* Exceptions for "TestGen" folder in "TestGen" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D16512BC2FE9F026004C0433 /* TestGen */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D16512BF2FE9F026004C0433 /* TestGen */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D1E3DA60307037C200AF3DD0 /* Exceptions for "TestGen" folder in "TestGen" target */,
+			);
 			path = TestGen;
 			sourceTree = "<group>";
 		};
@@ -32,6 +50,7 @@
 		D16512B42FE9F026004C0433 = {
 			isa = PBXGroup;
 			children = (
+				D1E3DA5D307036A500AF3DD0 /* Secrets.xcconfig */,
 				D16512BF2FE9F026004C0433 /* TestGen */,
 				D16512BE2FE9F026004C0433 /* Products */,
 			);
@@ -109,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1E3DA5E307036A500AF3DD0 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +147,7 @@
 /* Begin XCBuildConfiguration section */
 		D16512C62FE9F028004C0433 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1E3DA5D307036A500AF3DD0 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -253,6 +274,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestGen/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +306,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestGen/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

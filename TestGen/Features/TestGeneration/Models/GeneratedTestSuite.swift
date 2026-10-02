@@ -1,26 +1,20 @@
 import Foundation
 
-struct GeneratedTestSuite: Codable, Equatable {
+struct GeneratedTestSuite: Decodable, Equatable {
     let sourceType: String
     let summary: String
     let tests: [GeneratedTest]
 }
 
-struct GeneratedTest: Codable, Identifiable, Equatable {
-    let id: UUID
+struct GeneratedTest: Identifiable, Decodable, Equatable {
+    let id = UUID()
     let name: String
     let purpose: String
     let code: String
 
-    init(
-        id: UUID = UUID(),
-        name: String,
-        purpose: String,
-        code: String
-    ) {
-        self.id = id
-        self.name = name
-        self.purpose = purpose
-        self.code = code
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case purpose
+        case code
     }
 }

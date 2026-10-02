@@ -1,31 +1,36 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
 
     @StateObject private var viewModel: TestGenerationViewModel
+    @State private var copiedTestID: UUID?
 
-    init(aiProvider: AIProvider = MockAIProvider()) {
+    init(
+        aiProvider: AIProvider = GeminiAIProvider(
+            apiKey: AppConfiguration.geminiAPIKey
+        )
+    ) {
         _viewModel = StateObject(
-            wrappedValue: TestGenerationViewModel(aiProvider: aiProvider)
+            wrappedValue: TestGenerationViewModel(
+                aiProvider: aiProvider
+            )
         )
     }
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 20) {
-
-                header
-
-                sourceEditor
-
-                generateButton
-
-                resultSection
-
-                Spacer()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    header
+                    sourceEditor
+                    generateButton
+                    resultSection
+                }
+                .padding()
             }
-            .padding()
             .navigationTitle("TestGen")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 
@@ -61,7 +66,7 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Generate
+    // MARK: - Generate Button
 
     private var generateButton: some View {
         Button {
@@ -88,7 +93,7 @@ struct ContentView: View {
         .disabled(isLoading)
     }
 
-    // MARK: - Result
+    // MARK: - Results
 
     @ViewBuilder
     private var resultSection: some View {
@@ -98,11 +103,15 @@ struct ContentView: View {
             EmptyView()
 
         case .loading:
-            Text("Analysing your Swift code...")
-                .foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                ProgressView()
+
+                Text("Analysing your Swift code...")
+                    .foregroundStyle(.secondary)
+            }
 
         case .success(let suite):
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 20) {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Generated XCTest")
@@ -114,38 +123,93 @@ struct ContentView: View {
                 }
 
                 ForEach(suite.tests) { test in
-                    VStack(alignment: .leading, spacing: 8) {
-
-                        Text(test.name)
-                            .font(.headline)
-
-                        Text(test.purpose)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
-                        ScrollView(.horizontal) {
-                            Text(test.code)
-                                .font(.system(.body, design: .monospaced))
-                                .textSelection(.enabled)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                                .padding()
-                        }
-                        .background(.secondary.opacity(0.08))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 10)
-                        )
-                    }
+                    testCard(test)
                 }
             }
 
         case .failure(let message):
-            Label(message, systemImage: "exclamationmark.triangle")
-                .foregroundStyle(.red)
+            Label(
+                message,
+                systemImage: "exclamationmark.triangle"
+            )
+            .foregroundStyle(.red)
         }
     }
+
+    // MARK: - Test Card
+
+    private func testCard(_ test: GeneratedTest) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+
+            HStack(alignment: .firstTextBaseline) {
+                Text(test.name)
+                    .font(.headline)
+
+                Spacer()
+
+                copyButton(for: test)
+            }
+
+            Text(test.purpose)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Text(test.code)
+                .font(.system(.body, design: .monospaced))
+                .textSelection(.enabled)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding()
+                .background(.secondary.opacity(0.08))
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 10)
+                )
+        }
+    }
+
+    // MARK: - Copy Button
+
+    private func copyButton(
+        for test: GeneratedTest
+    ) -> some View {
+        Button {
+            copy(test)
+        } label: {
+            if copiedTestID == test.id {
+                Label(
+                    "Copied",
+                    systemImage: "checkmark"
+                )
+                .font(.subheadline)
+            } else {
+                Label(
+                    "Copy",
+                    systemImage: "doc.on.doc"
+                )
+                .font(.subheadline)
+            }
+        }
+        .buttonStyle(.borderless)
+    }
+
+    // MARK: - Actions
+
+    private func copy(_ test: GeneratedTest) {
+        UIPasteboard.general.string = test.code
+        copiedTestID = test.id
+
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+
+            if copiedTestID == test.id {
+                copiedTestID = nil
+            }
+        }
+    }
+
+    // MARK: - Helpers
 
     private var isLoading: Bool {
         if case .loading = viewModel.state {
@@ -157,5 +221,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(aiProvider: MockAIProvider())
 }
+
