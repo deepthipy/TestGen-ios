@@ -3,7 +3,12 @@
 TestGen is an AI-powered iOS application that generates XCTest unit tests from Swift source code.
 
 Paste Swift code into the app, generate tests using Google's Gemini API, and copy the generated XCTest methods directly into your project.
+## Demo
 
+<p align="center">
+  <img src="testgen-main.png" width="320" alt="TestGen Swift source input">
+  <img src="testgen-results.png" width="320" alt="TestGen generated XCTest results">
+</p>
 ## Features
 
 - Generate XCTest unit tests from Swift source code
